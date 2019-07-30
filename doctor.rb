@@ -20,6 +20,20 @@ class Doctor < Person
 				"Hmm.",
 				"Of course."]
 
+	@@solutions = ["Get more sleep. At least 7 hours a night.",
+				"Read a book",
+				"Have an apple a day. But still come and visit me, okay?",
+				"Have a cookie and call me in the morning.",
+				"Make a habit of exercising in the morning.",
+				"Eat your veggies!",
+				"Eat your fruits!",
+				"Plant a garden!",
+				"Get a new hobby.",
+				"Get a life.",
+				"Reduce your intake of toxic waste.",
+				"Increase your intake of toxic waste. You might turn into a super hero and then you won't have to worry about it anymore.",
+				"Become the Batman."]
+
     attr_accessor :num_queries # Basically, the number of times listen is called
 
 	# Inflexibly the first method to be called
@@ -241,8 +255,14 @@ class Doctor < Person
 		input.downcase().include?("pain") or input.downcase().include?("ache") or
 		input.downcase().include?("ringing") or input.downcase.include?("sore") or
 		input.downcase().include?("shortness") or input.downcase().include?("hard time") or
-		input.downcase().include?("trouble"))) then
+		input.downcase().include?("trouble") or input.downcase().include?("aching") or
+		input.downcase().include?("discomfort") or input.downcase().include?("bowel") or
+		input.downcase().include?("abnormal"))) then
 			ask_for_symptoms(patient)
+			# User asks the doctor for a solution
+		elsif(input.downcase().include?("should i") or input.downcase().include?("tell me") or
+			 input.downcase().include?("pray tell")) then
+			give_solution(patient)
 			# User has had enough of this nonsense
 		elsif(input.downcase().include?("quit") or input.downcase().include?("end") or
 		input.downcase().include?("farewell") or input.downcase().include?("bye") or
@@ -253,6 +273,29 @@ class Doctor < Person
 			puts(@@responses[Random.rand(@@responses.length-1)]) # If nothing else applies, output a random response from the list
 		end
 		return input
+	end
+
+	# give the patient a solution for every symptom
+	def give_solution(patient)
+		if(patient.symptoms.length == 0) then
+			puts("You do not have any symptoms for me to solve")
+		else
+			puts("Here is my recommendation:")
+			solutions = Array.new
+			for symptom in patient.symptoms do
+				puts("For #{symptom}, I recommend:")
+				loop do
+					solution = Random.rand(@@solutions.length-1)
+					if(solutions.include?(@@solutions[solution])) then
+						next
+					else
+						solutions.push(@@solutions[solution])
+						puts(@@solutions[solution])
+						break
+					end
+				end
+			end
+		end
 	end
 end
 # This is the end
