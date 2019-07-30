@@ -3,6 +3,7 @@ require_relative 'person.rb'
 class Doctor < Person
 
     @@num_queries = 0
+	# Create the random responses that will be used when the doctor doesn't have any programmed response
 	@@responses = ["Is that really how you feel?",
 				"I understand completely.",
 				"Maybe I can help with that.",
@@ -19,8 +20,9 @@ class Doctor < Person
 				"Hmm.",
 				"Of course."]
 
-    attr_accessor :num_queries
+    attr_accessor :num_queries # Basically, the number of times listen is called
 
+	# Inflexibly the first method to be called
     def greeting(patient)
         puts("Hello, #{patient.first_name}. I am a doctor. I am here to help.")
         puts("For starters, I need a bit of information.")
@@ -29,18 +31,19 @@ class Doctor < Person
     end
     
     def ask_for_first_name()
-        print ("What is your first name?")
+        print ("What is your first name? ")
         return gets().chop
     end
 
     def ask_for_last_name()
-        print("What is your last name?")
+        print("What is your last name? ")
         return gets().chop
     end
 
+	# Loops until the user gives a valid response
     def ask_for_gender()
         loop do
-            print("What is your gender?")
+            print("What is your gender? ")
             gender = gets().chop
             if(gender.casecmp('f') == 0 or gender.casecmp('m') == 0 or gender.casecmp('female') == 0 or gender.casecmp('male') == 0) then
                 return gender
@@ -48,9 +51,10 @@ class Doctor < Person
         end
     end
 
+	# Loops until the user gives an integer
     def ask_for_age()
         loop do
-            print("What is your age?")
+            print("What is your age? ")
             age = gets().chop
             if(is_number(age)) then
                 return age.to_i
@@ -67,6 +71,8 @@ class Doctor < Person
 		puts("You made #{@@num_queries} queries")
 	end
 
+	# Listen can potentially branch off and do other things before coming back here depending on the user's input
+	# This method checks if that has happened by checking if listen has returned "next"
     def ask_for_medications(patient)
         print("Are you taking any medications? ")
         loop do
@@ -121,8 +127,10 @@ class Doctor < Person
         end
 	end
 
+	# Prints the list of medications and gives the user the option of removing one from the list
 	def show_medications(patient)
 		puts("Lets see ... I have here that you are taking:")
+		# Prints the list of medications with the index of each on the left hand side
 		patient.medications.each { |med| puts("#{patient.medications.index(med)} #{med}") }
 		print("Is this correct? ")
 		input = gets()
@@ -152,8 +160,10 @@ class Doctor < Person
 		end
 	end
 					
+	# Prints the list of symptoms and gives the user the option of removing one from the list
 	def show_symptoms(patient)
 		puts("Lets see ... I have here that you are taking:")
+		# Prints the list of symptoms with the index of each on the left hand side
 		patient.symptoms.each { |symptom| puts("#{patient.symptoms.index(symptom)} #{symptom}") }
 		print("Is this correct? ")
 		input = gets()
@@ -184,13 +194,15 @@ class Doctor < Person
 	end
 
     # listen(patient, *options) is the "main" method for the doctor
-    # The loop repeatedly calls this to elicit more queries from the user
-    # Ideally, every method outside of listen should take user input from this method
+	# The loop in runDoctor.rb repeatedly calls this to elicit more queries from the user
+    # Ideally, other methods should take user input from this method
+	# in order to make input feel more natural
 
     def listen(patient, *options)
         @@num_queries += 1
         input = gets().chop
 
+		# Change the user's name
         if(input.downcase().include?("my name is") or input.downcase().include?("that's not my name") or 
 		input.downcase().include?("that is not my name"))
             puts("My deepest apologies.")
@@ -200,16 +212,20 @@ class Doctor < Person
 			patient.age = ask_for_age()
             puts("\nOkay, #{patient.name}. Back to where we were before...")
             return "next"
+			# Ask for the doctor's name
         elsif(input.downcase().include?("your name") or
 			input.downcase().include?("who are you")) then
             puts("My name is Dr. #{name}.")
             return "next"
+			# User is talking about medications
         elsif(input.downcase().include?("i am taking") or input.downcase().include?("i'm taking"))
 		  ask_for_medications(patient)
 		  return "next"
+		  # Check the list of medications
 		elsif(input.downcase().include?("my medications") or input.downcase().include?("my meds")) then
 			show_medications(patient)
 			ask_for_medications(patient)
+			# Check the list of symptoms
 		elsif(input.downcase().include?("my symptoms")) then
 			show_symptoms(patient)
 			print("Do you have any other symptoms? ")
@@ -219,6 +235,7 @@ class Doctor < Person
 			else
 				ask_for_symptoms(patient)
 			end
+			# User is describing symptoms
 		elsif(not(options.include?('symptom')) and (input.downcase().include?("symptom") or
 		input.downcase().include?("bad") or input.downcase().include?("cough") or
 		input.downcase().include?("pain") or input.downcase().include?("ache") or
@@ -226,6 +243,7 @@ class Doctor < Person
 		input.downcase().include?("shortness") or input.downcase().include?("hard time") or
 		input.downcase().include?("trouble"))) then
 			ask_for_symptoms(patient)
+			# User has had enough of this nonsense
 		elsif(input.downcase().include?("quit") or input.downcase().include?("end") or
 		input.downcase().include?("farewell") or input.downcase().include?("bye") or
 		input.downcase().include?("adieu")) then
@@ -237,3 +255,4 @@ class Doctor < Person
 		return input
 	end
 end
+# This is the end

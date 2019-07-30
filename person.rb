@@ -117,4 +117,3 @@ class Person
         return "#{first_name} #{last_name}"
     end
 end
-
