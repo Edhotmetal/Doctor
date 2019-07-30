@@ -8,10 +8,10 @@ Ask the doctor whatever you like and complain when you get illogical or irreleva
 Extended by doctor and patient
 
 The contructor randomly assigns:
-first_name
-last_name
-age
-gender
+-first_name
+-last_name
+-age
+-gender
 when a new Person object is created
 
 This file contains the list of random names
