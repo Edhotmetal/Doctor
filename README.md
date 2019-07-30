@@ -83,6 +83,10 @@ It shouldn't be too hard to address this.
 If none of the keywords match, the doctor spits out a random response from the list of responses.
 \*options is used by the caller to bypass certain keyword checks so that the user's input isn't gobbled up by listen
 
+- **give_solution(patient)**
+Reads the patient's list of symptoms and gives a solution for each one
+Solutions are chosen at random from the list of solutions.
+
 # patient.rb
 extends Person
 
