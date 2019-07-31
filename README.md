@@ -5,7 +5,7 @@ Start the action by running "ruby runDoctor.rb" in the command line
 
 Ask the doctor whatever you like and complain when you get illogical or irrelevant responses.
 
-# person.rb
+## person.rb
 Extended by doctor and patient
 
 The contructor randomly assigns:
@@ -20,7 +20,7 @@ This file contains the list of random names
 An 'f' or 'm' is appended to the end of each first name to indicate gender.
 This character is removed when the name is assigned to the person
 
-# doctor.rb
+## doctor.rb
 Extends the Person class
 
 This contains the Doctor class and all of the logic.
@@ -87,7 +87,7 @@ If none of the keywords match, the doctor spits out a random response from the l
 Reads the patient's list of symptoms and gives a solution for each one
 Solutions are chosen at random from the list of solutions.
 
-# patient.rb
+## patient.rb
 extends Person
 
 This is you!
